@@ -7,27 +7,34 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        .filter-container { margin: 2rem 0; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        /* Filter Styles */
+        .filter-container { margin: 2rem 0; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; padding: 0 20px; }
         .search-bar { padding: 10px; width: 300px; border-radius: 5px; border: 1px solid var(--primary); background: #1e1e26; color: white; }
-        .tag-btn { background: #333; color: white; border: none; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .tag-btn.active { background: var(--primary); color: black; }
+        .tag-btn { background: #333; color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; }
+        .tag-btn.active { background: var(--primary); color: black; box-shadow: 0 0 10px var(--primary); }
+        .tag-btn:hover { background: #444; }
+
+        /* Card Meta Styles */
         .post-meta { font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; }
-        .tag-label { background: rgba(0, 212, 255, 0.1); color: var(--primary); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-right: 5px; }
+        .tag-label { background: rgba(0, 212, 255, 0.1); color: var(--primary); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-right: 5px; border: 1px solid rgba(0, 212, 255, 0.3); }
         
-        #post-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 50px 10%; }
+        /* Modal / Popup Styles */
+        #post-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 50px 5%; }
         
         @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.6); }
+            from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
         }
 
         .modal-content { 
             background: #1e1e26; padding: 40px; border-radius: 10px; max-width: 800px; margin: auto; position: relative; 
-            border: 1px solid var(--primary); animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            border: 1px solid var(--primary); animation: zoomIn 0.3s ease-out forwards;
         }
 
-        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--secondary); }
-        #modal-body p { white-space: pre-line; line-height: 1.8; color: #ddd; }
+        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--secondary); line-height: 1; }
+        
+        /* The New Line Fix */
+        #modal-body p { white-space: pre-line; line-height: 1.8; color: #ddd; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -41,14 +48,18 @@
         </nav>
     </header>
 
-    <section class="content-section">
-        <h1>Fleaq Dev Log</h1>
+    <section class="content-section" style="padding-top: 80px;">
+        <h1 style="text-align: center; font-family: 'Orbitron'; color: white;">Fleaq Dev Log</h1>
+        
         <div class="filter-container">
             <input type="text" id="searchInput" class="search-bar" placeholder="Search posts...">
             <button class="tag-btn active" onclick="filterTags('All')">All</button>
             <button class="tag-btn" onclick="filterTags('Games')">Games</button>
             <button class="tag-btn" onclick="filterTags('Animation')">Animation</button>
+            <button class="tag-btn" onclick="filterTags('News')">News</button>
+            <button class="tag-btn" onclick="filterTags('Art')">Art</button>
         </div>
+
         <div class="grid" id="blog-container">Loading posts...</div>
     </section>
 
@@ -64,12 +75,13 @@
 
         async function fetchPosts() {
             try {
-                const response = await fetch('posts.json');
+                // Fetching the JSON file from your repo
+                const response = await fetch('posts.json?v=' + new Date().getTime());
                 if (!response.ok) throw new Error('Could not find posts.json');
                 allPosts = await response.json();
                 displayPosts();
             } catch (e) { 
-                document.getElementById('blog-container').innerText = "Error: Create a posts.json file in your repo!"; 
+                document.getElementById('blog-container').innerHTML = "<p style='color:red;'>Error: Make sure 'posts.json' is in your GitHub folder!</p>"; 
             }
         }
 
@@ -78,20 +90,28 @@
             container.innerHTML = '';
 
             const filtered = allPosts.filter(p => {
-                const matchesTag = filter === 'All' || p.tags.includes(filter);
+                const matchesTag = filter === 'All' || (p.tags && p.tags.includes(filter));
                 const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase());
                 return matchesTag && matchesSearch;
             });
 
+            if (filtered.length === 0) {
+                container.innerHTML = "<p style='color:gray;'>No posts found matching that criteria.</p>";
+                return;
+            }
+
             filtered.forEach((post) => {
                 const card = document.createElement('div');
                 card.className = 'card';
+                card.style.cursor = 'pointer';
                 card.onclick = () => openPost(post);
                 card.innerHTML = `
                     <div class="post-meta">By ${post.author} | ${post.date}</div>
-                    <h3>${post.title}</h3>
-                    <p>${post.summary}</p>
-                    <div style="margin-top:10px">${post.tags.map(t => `<span class="tag-label">${t}</span>`).join('')}</div>
+                    <h3 style="margin: 10px 0; color: var(--primary);">${post.title}</h3>
+                    <p style="font-size: 0.9rem; color: #ccc;">${post.summary}</p>
+                    <div style="margin-top:15px">
+                        ${post.tags ? post.tags.map(t => `<span class="tag-label">${t}</span>`).join('') : ''}
+                    </div>
                 `;
                 container.appendChild(card);
             });
@@ -101,24 +121,35 @@
             const modal = document.getElementById('post-modal');
             document.getElementById('modal-body').innerHTML = `
                 <div class="post-meta" style="font-size:1rem">By ${post.author} • ${post.date}</div>
-                <h1 style="color:var(--primary); font-family:'Orbitron'">${post.title}</h1>
-                <div style="margin: 20px 0;">${post.tags.map(t => `<span class="tag-label">${t}</span>`).join('')}</div>
+                <h1 style="color:var(--primary); font-family:'Orbitron'; margin: 15px 0;">${post.title}</h1>
+                <div style="margin-bottom: 20px;">
+                    ${post.tags ? post.tags.map(t => `<span class="tag-label">${t}</span>`).join('') : ''}
+                </div>
                 <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
-                <p style="font-size:1.2rem;">${post.content}</p>
+                <p>${post.content}</p>
             `;
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
 
-        function closePost() { document.getElementById('post-modal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function closePost() { 
+            document.getElementById('post-modal').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
+        }
 
         function filterTags(tag) {
             document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+            // Find the button that was clicked and make it active
             event.target.classList.add('active');
             displayPosts(tag, document.getElementById('searchInput').value);
         }
 
-        document.getElementById('searchInput').oninput = (e) => displayPosts('All', e.target.value);
+        document.getElementById('searchInput').oninput = (e) => {
+            const activeBtn = document.querySelector('.tag-btn.active');
+            const activeTag = activeBtn ? activeBtn.innerText : 'All';
+            displayPosts(activeTag, e.target.value);
+        };
+
         fetchPosts();
     </script>
 </body>
