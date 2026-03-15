@@ -1,18 +1,20 @@
 [
   {
-    "title": "Welcome to Fleaq Ent.",
-    "author": "Fleaq Team",
-    "date": "March 15, 2026",
-    "tags": ["News"],
-    "summary": "Our official Blog page is finally live!",
-    "content": "Welcome to the official Fleaq Entertainment blog.\n\nWe will be using this space to update you on our latest games, animations, and art projects.\n\nStay tuned for more updates!"
-  },
-  {
     "title": "Pause to Soltor",
     "author": "tht1bu.xsh",
     "date": "March 15, 2026",
     "tags": ["News", "Games"],
-    "summary": "A sneak peek at our character designs.",
+    "pinned": true,
+    "summary": "Development on Soltor has been temporarily placed on hold.",
     "content": "As of March 15th, 2026 at 2:00 PM AEST, development on Soltor has been temporarily placed on hold.\n\nWhile this was a difficult decision for the team to make, we believe it is the best step forward for both Soltor and Fleaq Entertainment.\n\nThis pause will allow us to:\n- Improve our planning and organize development more effectively.\n- Expand our team with new contributors.\n- Strengthen our marketing efforts.\n\nThis ensures that when development resumes in the coming months, the project will move forward in a much stronger and more sustainable way.\n\nWe truly appreciate everyone's patience, understanding, and continued support during this time."
+  },
+  {
+    "title": "Welcome to Fleaq Ent.",
+    "author": "Fleaq Team",
+    "date": "March 15, 2026",
+    "tags": ["News"],
+    "pinned": false,
+    "summary": "Our official Blog page is finally live!",
+    "content": "Welcome to the official Fleaq Entertainment blog.\n\nWe will be using this space to update you on our latest games, animations, and art projects.\n\nStay tuned for more updates!"
   }
 ]
