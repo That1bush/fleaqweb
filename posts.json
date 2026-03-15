@@ -1,18 +1,10 @@
 [
   {
-    "title": "Pause to Soltor",
-    "author": "Tht1bu.xsh",
-    "date": "15'th March 2026",
-    "tags": ["News", "Games"],
-    "summary": "We're pausing Soltor development for a better outcome",
-    "content": "As of March 15th, 2026 at 2:00 PM AEST, development on Soltor has been temporarily placed on hold; //n while this was a difficult decision for the team to make, we believe it is the best step forward for both Soltor and Fleaq Entertainment, as this pause will allow us to improve our planning, organize development more effectively, expand our team with new contributors, strengthen our marketing efforts, and ensure that when development resumes in the coming months the project will move forward in a much stronger, more prepared, and more sustainable way, and we truly appreciate everyone's patience, understanding, and continued support during this time."
-  },
-  {
-    "title": "Coming Soon",
-    "author": "ArtLead_Jen",
-    "date": "March 16, 2026",
-    "tags": ["Animation"],
-    "summary": "A sneak peek at our next short film.",
-    "content": "We are working on something big. Stay tuned!"
+    "title": "Welcome to Fleaq Ent.",
+    "author": "Admin_Fleaq",
+    "date": "March 15, 2026",
+    "tags": ["News"],
+    "summary": "Our official dev log is finally live!",
+    "content": "This is a new line test.\n\nEverything is working! Now we can just add posts here without touching the HTML code ever again."
   }
 ]
