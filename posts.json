@@ -15,6 +15,10 @@
     "tags": ["News"],
     "pinned": true,
     "summary": "Our official Blog page is finally live!",
+    "media": {
+      "type": "video",
+      "file": "intro_clip.mp4"
+    },
     "content": "Welcome to the official Fleaq Entertainment blog.\n\nWe will be using this space to update you on our latest game updates, animations/videos, and art projects.\n\nStay tuned for more updates!"
   }
 ]
