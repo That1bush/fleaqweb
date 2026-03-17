@@ -123,6 +123,41 @@
 
         document.getElementById('searchInput').oninput = (e) => displayPosts('All', e.target.value);
         fetchPosts();
+  
+    function openPost(post) {
+    let mediaHtml = '';
+    
+    if (post.media && post.media.file) {
+        // Change './media/' to whatever your folder is named (e.g., './images/')
+        const filePath = `./media/${post.media.file}`;
+
+        if (post.media.type === 'image') {
+            mediaHtml = `<img src="${filePath}" style="width:100%; border-radius:10px; margin: 20px 0; border: 1px solid var(--primary);">`;
+        } else if (post.media.type === 'video') {
+            mediaHtml = `
+                <video controls style="width:100%; border-radius:10px; margin: 20px 0; border: 1px solid var(--primary);">
+                    <source src="${filePath}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>`;
+        }
+    }
+
+    document.getElementById('modal-body').innerHTML = `
+        ${post.pinned ? '<div class="pinned-badge">📌 PINNED POST</div>' : ''}
+        <div class="post-meta">By ${post.author} • ${post.date}</div>
+        <h1 style="color:var(--primary); font-family:'Orbitron';">${post.title}</h1>
+        <div style="margin-bottom:15px">
+            ${post.tags.map(t => `<span class="tag-label">${t}</span>`).join('')}
+        </div>
+        ${mediaHtml}
+        <p>${post.content}</p>
+    `;
+    
+    document.getElementById('post-modal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
     </script>
 </body>
 </html>
+
+
